@@ -4,19 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using ScreenSound.Modelos;
 
 namespace ScreenSound.Banco
 {
-    public class Connection
+    public class ScreenSoundContext: DbContext
     {
+    /* Os DbSet's são coleções de entidades que representam as tabelas nos bancos de dados. 
+       São necessários para fazermos operações de CRUD nas classes do tipo DAL */
+        public DbSet<Artista> Artistas { get; set; }
+        public DbSet<Musica> Musicas { get; set; }
+
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial " +
             "Catalog=ScreenSound;Integrated Security=True;Encrypt=False;" +
             "Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
-        public SqlConnection ObterConexao()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            return new SqlConnection(connectionString);
+            optionsBuilder.UseSqlServer(connectionString);
         }
         
     }

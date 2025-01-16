@@ -11,47 +11,39 @@ namespace ScreenSound.Banco
     public class ArtistaDAL
     {
 
+        private readonly ScreenSoundContext context; // Porque precisamos passar para todos os métodos
+
+        public ArtistaDAL(ScreenSoundContext context)
+        {
+            this.context = context;
+        }
+
         public IEnumerable<Artista> Listar()
         {
-            var lista = new List<Artista>();
-            /* A instrução using faz com que aconteça um gerenciamento da execução por escopo, sendo assim,
-            assim que o escopo no qual foi usado a conexão for encerrado, a conexão também será. */
-            using var connection = new Connection().ObterConexao();
-            connection.Open();
-
-            string sql = "select * from Artistas";
-            SqlCommand command = new SqlCommand(sql, connection);
-            using SqlDataReader dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
-            {
-                // Converte para string o nome obtido pelo data reader, entre colchetes se refere à variável sql da tabela
-                string nomeArtista = Convert.ToString(dataReader["Nome"]);
-
-                string bioArtista = Convert.ToString(dataReader["Bio"]);
-                int idArtista = Convert.ToInt32(dataReader["Id"]);
-
-                Artista artista = new Artista(nomeArtista, bioArtista) { Id = idArtista };
-
-                lista.Add(artista);
-            }
-            return lista;
+            return context.Artistas.ToList();           
         }
 
         public void Adicionar(Artista artista)
         {
-            using var connection = new Connection().ObterConexao();
-            connection.Open();
+            context.Artistas.Add(artista);
+            context.SaveChanges();
+        }
 
-            string sql = "INSERT INTO Artistas (Nome, FotoPerfil, Bio) VALUES (@nome, @perfilPadrao, @bio)";
-            SqlCommand command = new SqlCommand(sql, connection);
+        public void Atualizar(Artista artista)
+        {
+            context.Artistas.Update(artista);
+            context.SaveChanges();
+        }
 
-            command.Parameters.AddWithValue("@nome", artista.Nome);
-            command.Parameters.AddWithValue("@perfilPadrao", artista.FotoPerfil);
-            command.Parameters.AddWithValue("@bio", artista.Bio);
+        public void Deletar(Artista artista)
+        {
+            context.Artistas.Remove(artista);
+            context.SaveChanges();
+        }
 
-            int retorno = command.ExecuteNonQuery();
-            Console.WriteLine($"Linhas afetadas pela query: {retorno}");
+        public Artista? RecuperarPeloNome(string nome)
+        { // Verifica se o nome passado por parãmetro é igual ao nome de "a" (objeto de iteração do tipo artista) 
+            return context.Artistas.FirstOrDefault(a => a.Nome.Equals(nome));
         }
 
     }
