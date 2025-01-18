@@ -8,7 +8,7 @@ using ScreenSound.Modelos;
 namespace ScreenSound.Banco
 {
     // Classe para Generics, por isso usamos "<T>", para especificar um tipo genrérico
-    public abstract class DAL<T> where T : class // "T" irá representar uma classe
+    public class DAL<T> where T : class // "T" irá representar uma classe
     {
         protected readonly ScreenSoundContext context;
 
