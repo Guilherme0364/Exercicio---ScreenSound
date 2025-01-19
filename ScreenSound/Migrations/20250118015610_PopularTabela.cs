@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using ScreenSound.Modelos;
+using ScreenSound.Shared.Modelos.Modelos;
 
 #nullable disable
 

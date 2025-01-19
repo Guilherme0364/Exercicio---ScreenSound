@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using ScreenSound.Modelos;
+using ScreenSound.Shared.Modelos.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
